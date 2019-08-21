@@ -1,0 +1,163 @@
+<html>
+	<head>
+		<title>AK IOI Game!</title>
+		<script>
+			var num=[0.0,1,0,0,0,0];
+			var cst=[0.0,0.0001,50,50,50,50];
+			var mlt=[0,1.02,1.05,1.1,1.2,1.5];
+			var clicks=0;
+			var IOI=0;
+			var aked=0;
+			var lev1=[0,0,0,0,0,0],lev2=[0,0,0,0,0,0];
+			function get(p)
+			{
+				var x=cst[p]*Math.pow(mlt[p],num[p])*Math.pow(0.5,lev2[p]);
+				if(p==1) return x;
+				return Math.ceil(x);
+			}
+			function upd()
+			{
+				document.getElementById("score").innerHTML=num[0];
+				document.getElementById("cst1").innerHTML=get(1);
+				document.getElementById("cst2").innerHTML=get(2);
+				document.getElementById("cst3").innerHTML=get(3);
+				document.getElementById("cst4").innerHTML=get(4);
+				document.getElementById("cst5").innerHTML=get(5);
+				document.getElementById("num1").innerHTML=num[1];
+				document.getElementById("num2").innerHTML=num[2];
+				document.getElementById("num3").innerHTML=num[3];
+				document.getElementById("num4").innerHTML=num[4];
+				document.getElementById("num5").innerHTML=num[5];
+				document.getElementById("iois").innerHTML=IOI;
+				document.getElementById("cst11").innerHTML=Math.pow(10,lev1[1]);
+				document.getElementById("cst21").innerHTML=Math.pow(10,lev2[1]);
+				document.getElementById("cst12").innerHTML=Math.pow(10,lev1[2]);
+				document.getElementById("cst22").innerHTML=Math.pow(10,lev2[2]);
+				document.getElementById("cst13").innerHTML=Math.pow(10,lev1[3]);
+				document.getElementById("cst23").innerHTML=Math.pow(10,lev2[3]);
+				document.getElementById("cst14").innerHTML=Math.pow(10,lev1[4]);
+				document.getElementById("cst24").innerHTML=Math.pow(10,lev2[4]);
+				document.getElementById("cst15").innerHTML=Math.pow(10,lev1[5]);
+				document.getElementById("cst25").innerHTML=Math.pow(10,lev2[5]);
+				document.getElementById("mlt1").innerHTML=Math.pow(2,lev1[1]);
+				document.getElementById("dev1").innerHTML=Math.pow(0.5,lev2[1]);
+				document.getElementById("mlt2").innerHTML=Math.pow(2,lev1[2]);
+				document.getElementById("dev2").innerHTML=Math.pow(0.5,lev2[2]);
+				document.getElementById("mlt3").innerHTML=Math.pow(2,lev1[3]);
+				document.getElementById("dev3").innerHTML=Math.pow(0.5,lev2[3]);
+				document.getElementById("mlt4").innerHTML=Math.pow(2,lev1[4]);
+				document.getElementById("dev4").innerHTML=Math.pow(0.5,lev2[4]);
+				document.getElementById("mlt5").innerHTML=Math.pow(2,lev1[5]);
+				document.getElementById("dev5").innerHTML=Math.pow(0.5,lev2[5]);
+			}
+			function buy(p)
+			{
+				var cost=get(p);
+				if(num[p-1]>=cost)
+				{
+					num[p-1]-=cost;
+					num[p]+=1;
+				}
+				upd();
+			}
+			function clck()
+			{
+				clicks+=1;
+				num[0]+=0.00001*num[1]*Math.pow(2,lev1[1]);
+				if(clicks%10==0) num[1]+=num[2]*Math.pow(2,lev1[2]);
+				if(clicks%15==0) num[2]+=num[3]*Math.pow(2,lev1[3]);
+				if(clicks%20==0) num[3]+=num[4]*Math.pow(2,lev1[4]);
+				if(clicks%25==0) num[4]+=num[5]*Math.pow(2,lev1[5]);
+				upd();
+				if(num[0]>=600&&aked==0)
+				{
+					alert("You AK IOI!!!");aked=1;
+				}
+			}
+			function hlp()
+			{
+				alert("This is a game of AK IOI.");
+				alert("Your goal is to get 600 points.");
+				alert("At first,you have an oier but nothing else.");
+				alert("Click on the button \"Get some points\",and you can get a little points.");
+				alert("What you earn per click depends on what you have at the moment:\n- Each oier gives you 0.00001 point per click.\n- Each cz gives you 1 oier every 10 clicks.\n- Each ltt gives you 1 cz every 15 clicks.\n- Each kkk gives you 1 ltt every 20 clicks.\n- Each Luogu gives you 1 kkk every 25 clicks.\n");
+				alert("After you AK IOI for the first time,you can rebirth(reset all of your things except IOIs) and get IOI(s) to update your things.");
+				alert("Good luck!:)");
+				upd();
+			}
+			function reb()
+			{
+				if(num[0]<600) {alert("You don't have enough score to rebirth!");return;}
+				IOI+=Math.floor(num[0]/600);
+				clicks=0;num[0]=num[2]=num[3]=num[4]=num[5]=0;num[1]=1;aked=0;
+				upd(); 
+			}
+			function buy2(p,q)
+			{
+				if(p==1)
+				{
+					var cost=Math.pow(10,lev1[q]);
+					if(IOI>=cost) {IOI-=cost;lev1[q]+=1;}
+				}
+				if(p==2)
+				{
+					var cost=Math.pow(10,lev2[q]);
+					if(IOI>=cost) {IOI-=cost;lev2[q]+=1;}
+				}
+				upd();
+			}
+		</script>
+	</head>
+	<body>
+		<style>
+			p{padding:0px; margin:0px;display: inline;}
+		</style>
+		<p>AK-IOI-Game version 1.1</p><br>
+		<button onclick="hlp()">Wanna get help?</button><br>
+		<br>
+		<p>Your score:</p><p id="score">0</p><p> point(s)<br>
+		<button onclick="clck()">Get some points!</button><br>
+		<br>
+		<button onclick="buy(1)">Buy an oier</button><p>cost:</p><p id="cst1">0.000102</p><p> point(s)</p><br>
+		<p>You have </p><p id="num1">1</p><p> oier(s)</p><br>
+		<br>
+		<button onclick="buy(2)">Buy a cz</button><p>cost:</p><p id="cst2">50</p><p> oier(s)</p><br>
+		<p>You have </p><p id="num2">0</p><p> cz(s)</p><br>
+		<br>
+		<button onclick="buy(3)">Buy a ltt</button><p>cost:</p><p id="cst3">50</p><p> cz(s)</p><br>
+		<p>You have </p><p id="num3">0</p><p> ltt(s)</p><br>
+		<br>
+		<button onclick="buy(4)">Buy a kkk</button><p>cost:</p><p id="cst4">50</p><p> ltt(s)</p><br>
+		<p>You have </p><p id="num4">0</p><p> kkk(s)</p><br>
+		<br>
+		<button onclick="buy(5)">Buy a Luogu</button><p>cost:</p><p id="cst5">50</p><p> kkk(s)</p><br>
+		<p>You have </p><p id="num5">0</p><p> Luogu(s)</p><br><br>
+		<button onclick="reb()">rebirth!</button><br>
+		<p>You have </p><p id="iois">0</p><p> IOI(s)</p><br>
+		<br>
+		<button onclick="buy2(1,1)">Multiply oier's production by 2</button>
+		<p>cost:</p><p id="cst11">1</p><p> IOI(s),now mult:x</p><p id="mlt1">1</p><br>
+		<button onclick="buy2(2,1)">Multiply oier's cost by 0.5</button>
+		<p>cost:</p><p id="cst21">1</p><p> IOI(s),now mult:x</p><p id="dev1">1</p><br>
+		<br>
+		<button onclick="buy2(1,2)">Multiply cz's production by 2</button>
+		<p>cost:</p><p id="cst12">1</p><p> IOI(s),now mult:x</p><p id="mlt2">1</p><br>
+		<button onclick="buy2(2,2)">Multiply cz's cost by 0.5</button>
+		<p>cost:</p><p id="cst22">1</p><p> IOI(s),now mult:x</p><p id="dev2">1</p><br>
+		<br>
+		<button onclick="buy2(1,3)">Multiply ltt's production by 2</button>
+		<p>cost:</p><p id="cst13">1</p><p> IOI(s),now mult:x</p><p id="mlt3">1</p><br>
+		<button onclick="buy2(2,3)">Multiply ltt's cost by 0.5</button>
+		<p>cost:</p><p id="cst23">1</p><p> IOI(s),now mult:x</p><p id="dev3">1</p><br>
+		<br>
+		<button onclick="buy2(1,4)">Multiply kkk's production by 2</button>
+		<p>cost:</p><p id="cst14">1</p><p> IOI(s),now mult:x</p><p id="mlt4">1</p><br>
+		<button onclick="buy2(2,4)">Multiply kkk's cost by 0.5</button>
+		<p>cost:</p><p id="cst24">1</p><p> IOI(s),now mult:x</p><p id="dev4">1</p><br>
+		<br>
+		<button onclick="buy2(1,5)">Multiply Luogu's production by 2</button>
+		<p>cost:</p><p id="cst15">1</p><p> IOI(s),now mult:x</p><p id="mlt5">1</p><br>
+		<button onclick="buy2(2,5)">Multiply Luogu's cost by 0.5</button>
+		<p>cost:</p><p id="cst25">1</p><p> IOI(s),now mult:x</p><p id="dev5">1</p><br>
+	</body>
+</html>
